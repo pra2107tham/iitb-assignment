@@ -13,5 +13,5 @@ public class CourseInstance {
 
     private int year;
     private int semester;
-    private String courseId;
+    private int courseId;
 }
