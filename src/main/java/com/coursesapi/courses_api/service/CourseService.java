@@ -16,16 +16,19 @@ public class CourseService {
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
-
-    public Course saveCourse(Course course) {
+    public Optional<Course> getCourseById(Long courseCode) {
+        return courseRepository.findById(courseCode);
+    }
+    public Course createCourse(Course course) {
+        if(course == null || course.getCourseCode() == null ) {
+            throw new IllegalArgumentException("Coursecode cannot be null");
+        }
         return courseRepository.save(course);
     }
-
-    public Optional<Course> getCourseById(Long id) {
-        return courseRepository.findById(id);
-    }
-
-    public void deleteCourse(Long id) {
-        courseRepository.deleteById(id);
+    public void deleteCourse(Long courseCode) {
+        if (!courseRepository.existsById(courseCode)) {
+            throw new IllegalArgumentException("Course with given code does not exist");
+        }
+        courseRepository.deleteById(courseCode);
     }
 }

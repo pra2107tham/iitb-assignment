@@ -9,14 +9,40 @@ import java.util.List;
 
 @Service
 public class CourseInstanceService {
+
     @Autowired
     private CourseInstanceRepository courseInstanceRepository;
 
-    public List<CourseInstance> getAllCourseInstances() {
-        return courseInstanceRepository.findAll();
+    public CourseInstanceService(CourseInstanceRepository courseInstanceRepository) {
+        this.courseInstanceRepository = courseInstanceRepository;
     }
 
-    public CourseInstance saveCourseInstance(CourseInstance courseInstance) {
+    public CourseInstance addCourseInstance(CourseInstance courseInstance) {
         return courseInstanceRepository.save(courseInstance);
     }
+    public List<CourseInstance> getCourseInstances() {
+        return courseInstanceRepository.findAll();
+    }
+    public List<CourseInstance> getCourseInstancesByYear(int year){
+        return courseInstanceRepository.findAllByYear(year);
+    }
+    public List<CourseInstance> getCourseInstancesBySemester(int semester){
+        return courseInstanceRepository.findAllBySemester(semester);
+    }
+    public List<CourseInstance> getCourseInstancesByYearAndSemester(int year, int semester){
+        return courseInstanceRepository.findAllByYearAndSemester(year, semester);
+    }
+    public CourseInstance getCourseInstanceByYearAndSemesterAndId(int year, int semester, Long id){
+        return courseInstanceRepository.findAllByYearAndSemesterAndId(year, semester, id);
+    }
+    public String deleteCourseInstanceByYearSemesterAndId(int year, int semester, Long id) {
+        CourseInstance courseInstance = courseInstanceRepository.findAllByYearAndSemesterAndId(year, semester, id);
+        if (courseInstance != null) {
+            courseInstanceRepository.delete(courseInstance);
+            return "CourseInstance deleted successfully";
+        } else {
+            return "CourseInstance not found";
+        }
+    }
+
 }

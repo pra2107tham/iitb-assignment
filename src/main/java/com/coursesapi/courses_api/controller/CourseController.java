@@ -21,25 +21,28 @@ public class CourseController {
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
-
-    @PostMapping
-    public Course addCourse(@RequestBody Course course){
-        return courseService.saveCourse(course);
+    @GetMapping("/{courseCode}")
+    public ResponseEntity<Course> getCourseById(@PathVariable Long courseCode) {
+        Optional<Course> course = courseService.getCourseById(courseCode);
+        return course.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
-        Optional<Course> course = courseService.getCourseById(id);
-        if (course.isPresent()) {
-            return ResponseEntity.ok(course.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @PostMapping
+    public ResponseEntity<Course> createCourse(@RequestBody Course course){
+        try {
+            Course createdCourse = courseService.createCourse(course);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
-    @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
+    @DeleteMapping("/{courseCode}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseCode) {
+        try {
+            courseService.deleteCourse(courseCode);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

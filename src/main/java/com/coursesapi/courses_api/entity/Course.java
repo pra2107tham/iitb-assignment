@@ -1,17 +1,22 @@
 package com.coursesapi.courses_api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
+    @Id
+    @Column(name = "courseCode")
+    private Long courseCode;
+
+    @Column(name = "title")
     private String title;
-    private String courseCode;
+
+    @Column(name = "description")
     private String description;
+
 }
