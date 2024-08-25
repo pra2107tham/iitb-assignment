@@ -26,9 +26,11 @@ public class CourseService {
         return courseRepository.save(course);
     }
     public void deleteCourse(Long courseCode) {
-        if (!courseRepository.existsById(courseCode)) {
-            throw new IllegalArgumentException("Course with given code does not exist");
+        Course course = courseRepository.findById(courseCode).orElseThrow(() -> new IllegalArgumentException("Course not found"));
+        try{
+            courseRepository.delete(course);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Course not found");
         }
-        courseRepository.deleteById(courseCode);
     }
 }

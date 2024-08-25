@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/instances")
 public class CourseInstanceController {
     @Autowired
@@ -45,7 +46,13 @@ public class CourseInstanceController {
         return courseInstanceService.getCourseInstanceByYearAndSemesterAndId(year, semester, id);
     }
     @DeleteMapping("/{year}/{semester}/{id}")
-    public String deleteCourseInstanceByYearSemesterAndId(@PathVariable int year, @PathVariable int semester, @PathVariable Long id) {
-        return courseInstanceService.deleteCourseInstanceByYearSemesterAndId(year, semester, id);
+    public ResponseEntity<String> deleteCourseInstanceByYearSemesterAndId(@PathVariable int year, @PathVariable int semester, @PathVariable Long id) {
+        try {
+            String result = courseInstanceService.deleteCourseInstanceByYearSemesterAndId(year, semester, id);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid input data");
+        }
     }
+
 }

@@ -17,7 +17,7 @@ public class CourseInstance {
 
     private int semester;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "course_id", referencedColumnName = "courseCode")
     private Course course;
 }
